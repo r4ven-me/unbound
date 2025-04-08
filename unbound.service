@@ -1,0 +1,15 @@
+[Unit]
+Description=Unbound DNS service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=on-failure
+RestartSec=5
+User=unbound
+Group=unbound
+ExecStart=/usr/bin/sudo --group=docker /usr/bin/docker compose -f /opt/unbound/docker-compose.yml up
+ExecStop=/usr/bin/sudo --group=docker /usr/bin/docker compose -f /opt/unbound/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target

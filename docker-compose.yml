@@ -1,0 +1,47 @@
+---
+
+networks:
+  dns_network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: "br-unbound"
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.100.100.0/24
+          gateway: 10.100.100.1
+
+
+services:
+  unbound:
+    image: r4venme/unbound
+    # image: r4venme/unbound:1.17
+    deploy:
+      resources:
+        limits:
+          cpus: '0.70'
+          memory: 512M
+        reservations:
+          cpus: '0.2'
+          memory: 256M
+    container_name: unbound
+    restart: on-failure
+    hostname: unbound
+    environment:
+      PUID: 14956
+      PGID: 14956
+    volumes:
+      - ./data/unbound/etc/:/etc/unbound/
+    cap_add:
+      - NET_ADMIN
+    # command:
+    #   - /usr/sbin/unbound -vvv -d -p -c /etc/unbound/unbound.conf
+    expose:
+      - "53/udp"
+      - "53/tcp"
+    # ports:
+    #   - "53:53/udp"
+    #   - "53:53/tcp"
+    networks:
+      dns_network:
+        ipv4_address: 10.100.100.200

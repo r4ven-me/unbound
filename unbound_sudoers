@@ -1,0 +1,5 @@
+Cmnd_Alias UNBOUND_DOCKER = \
+    /usr/bin/docker compose -f /opt/unbound/docker-compose.yml up, \
+    /usr/bin/docker compose -f /opt/unbound/docker-compose.yml down
+
+unbound ALL = (:docker) NOPASSWD: UNBOUND_DOCKER
