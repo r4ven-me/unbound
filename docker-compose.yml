@@ -24,6 +24,11 @@ services:
         reservations:
           cpus: '0.2'
           memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     container_name: unbound
     restart: on-failure
     hostname: unbound

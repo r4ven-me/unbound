@@ -9,16 +9,20 @@
 
 
 ### PREPARATION ###
+
+# Define working directory and root hints URL
 WORK_DIR="/etc/unbound"
 ROOT_HINTS_URL="https://www.internic.net/domain/named.cache"
 CONF_LIST=("unbound.conf" "forward-records.conf" "srv-records.conf" "a-records.conf")
 
+# Copy default config files if they don't exist
 for config in "${CONF_LIST[@]}"; do
     if [[ ! -f "${WORK_DIR}"/"${config}" ]]; then
         cp /usr/share/doc/unbound/"${config}" "${WORK_DIR}"
     fi
 done
 
+# Handle root.key file - create backup and update or restore
 if [[ -f "${WORK_DIR}"/root.key ]]; then
     cp "${WORK_DIR}"/root.key{,_backup}
 
@@ -31,6 +35,7 @@ else
     cp /usr/share/doc/unbound/root.key "$WORK_DIR"
 fi
 
+# Handle root.hints file - download fresh copy or restore backup
 if [[ -f "${WORK_DIR}"/root.hints ]]; then
     cp "${WORK_DIR}"/root.hints{,_backup}
 
@@ -43,6 +48,7 @@ else
     cp /usr/share/doc/unbound/root.hints "$WORK_DIR"
 fi
 
+# Set correct ownership for all files
 chown -R unbound:unbound "$WORK_DIR"
 
 
