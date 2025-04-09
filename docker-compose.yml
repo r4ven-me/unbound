@@ -36,7 +36,7 @@ services:
       PUID: 14956
       PGID: 14956
     volumes:
-      - ./data/unbound/etc/:/etc/unbound/
+      - ./data/etc/:/etc/unbound/
     cap_add:
       - NET_ADMIN
     # command:
